@@ -20,13 +20,15 @@ ChamaAI revolutionizes how savings groups manage finances by providing:
 - Capital utilization metrics
 - Member portfolio management
 
-### 2. AI Companion Chat
+### 2. AI Companion Chat (RAG-Enhanced)
 - **Bilingual support** (English & Swahili)
-- Context-aware financial recommendations
-- Share portfolio guidance
-- Loan management assistance
-- Dividend projections
-- Fine and penalty insights
+- **RAG Pipeline**: Retrieval-Augmented Generation from transaction data
+- Context-aware financial recommendations based on real user history
+- Share portfolio guidance with ownership analysis
+- Loan management assistance with debt-to-contribution ratios
+- Dividend projections using historical contribution patterns
+- Fine and penalty insights with personalized advice
+- Real Hugging Face API integration (Llama-2-7b with fallback to mock responses)
 
 ### 3. Share Management System
 - Admin tools to issue shares to members
@@ -173,20 +175,48 @@ The application will be available at `http://localhost:3000`
 4. **Try Accessibility**: Click "Accessibility" button to explore USSD and WhatsApp simulators
 5. **Switch Chamas**: Use the chama selector to compare Obimbo (growth) vs Umoja (mature)
 
-## AI Companion Features
+## AI Companion Features (RAG-Enhanced)
 
-The AI Companion responds to natural language queries about:
-- **Shares**: "Tell me about shares" → Personalized portfolio recommendations
-- **Savings**: "How do I save?" → Savings strategies based on member history
-- **Loans**: "Check my loans" → Outstanding balance and repayment status
-- **Dividends**: "What are my dividends?" → Projections based on ownership percentage
-- **Fines**: "About my fines" → Penalty details and avoidance strategies
+### Retrieval-Augmented Generation (RAG) Pipeline
+
+The AI Companion uses a sophisticated RAG pipeline that retrieves contextual data from your chama's transaction history:
+
+**What RAG Does:**
+1. **User Profile Extraction**: Current shares, ownership %, contributions, loans, and fines
+2. **Chama Status Analysis**: Total capital, members, utilization rate, and activity metrics
+3. **Transaction Retrieval**: Filters relevant transactions based on query intent
+4. **Financial Metrics**: Calculates contribution patterns, loan-to-contribution ratios, and growth projections
+5. **Context Formatting**: Creates a system prompt that informs the AI model
+
+**Example Query Flow:**
+- User asks: "Should I buy more shares?"
+- RAG extracts: User has 0 shares, 1 fine, KSh 5,000 in contributions
+- System prompt includes: "Jane has penalty risk; buying shares improves standing"
+- AI responds with personalized recommendation backed by real data
+
+### Query Types
+
+The AI Companion responds to natural language queries:
+- **Shares**: "Tell me about shares" → Ownership analysis & purchase recommendations
+- **Savings**: "How do I save?" → Contribution strategies based on member history
+- **Loans**: "Check my loans" → Outstanding balance, repayment status, debt metrics
+- **Dividends**: "What are my dividends?" → Projections based on actual ownership %
+- **Fines**: "About my fines" → Penalty details, avoidance strategies, share-buying incentives
+- **Status**: "Tell me my status" → Complete financial snapshot
 - **Help**: "Help" → List of available queries
 
-**Bilingual Support**:
-- Automatically detects Swahili keywords
-- Responds in Swahili if detected, English otherwise
-- Language toggle buttons in chat interface
+### Real API Integration
+
+**Hugging Face Integration:**
+- Uses Llama-2-7b-chat-hf model for high-quality responses
+- Falls back to mock responses if API unavailable or rate-limited
+- Requires `HUGGINGFACE_API_KEY` environment variable
+- No API key? System uses hardcoded mock responses (still high quality!)
+
+**Bilingual Support:**
+- Automatically detects Swahili keywords in input
+- Responds in detected language
+- Manual language toggle buttons available
 
 ## Smart Contract Simulator
 

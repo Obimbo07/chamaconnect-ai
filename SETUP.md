@@ -14,7 +14,19 @@ pnpm dev
 
 The app will be available at `http://localhost:3000`
 
-### 3. Access the Application
+### 3. Optional: Enable Real AI Integration
+For real Hugging Face API responses (instead of mock responses):
+
+1. Get a free API key from [Hugging Face](https://huggingface.co/settings/tokens)
+2. Create a `.env.local` file in the project root:
+   ```bash
+   HUGGINGFACE_API_KEY=hf_your_api_key_here
+   ```
+3. Restart the development server
+4. The AI companion will now use real Pawa-Gemma-Swahili-2B responses with RAG context
+5. Falls back to mock responses if API rate limited or unavailable
+
+### 4. Access the Application
 - **Entry Point**: `http://localhost:3000` (auto-redirects to login)
 - **Login Page**: `http://localhost:3000/login`
 - **Dashboard**: `http://localhost:3000/dashboard` (after login)

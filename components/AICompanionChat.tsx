@@ -13,6 +13,10 @@ interface Message {
   sender: 'user' | 'ai';
   language: 'en' | 'sw';
   timestamp: Date;
+  ragContext?: {
+    intent: string[];
+    hasRealAPIResponse: boolean;
+  };
 }
 
 interface AICompanionChatProps {
@@ -82,6 +86,7 @@ export function AICompanionChat({ user, chama }: AICompanionChatProps) {
         sender: 'ai',
         language: data.language,
         timestamp: new Date(),
+        ragContext: data.ragContext,
       };
 
       setMessages((prev) => [...prev, aiMessage]);
@@ -116,17 +121,25 @@ export function AICompanionChat({ user, chama }: AICompanionChatProps) {
                 key={msg.id}
                 className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div
-                  className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                    msg.sender === 'user'
-                      ? 'bg-blue-600 text-white rounded-br-none'
-                      : 'bg-slate-700 text-slate-100 rounded-bl-none'
-                  }`}
-                >
-                  <p className="text-sm">{msg.text}</p>
-                  <p className="text-xs mt-1 opacity-70">
-                    {msg.language === 'sw' ? '🇰🇪 SW' : '🇬🇧 EN'}
-                  </p>
+                <div>
+                  <div
+                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                      msg.sender === 'user'
+                        ? 'bg-blue-600 text-white rounded-br-none'
+                        : 'bg-slate-700 text-slate-100 rounded-bl-none'
+                    }`}
+                  >
+                    <p className="text-sm">{msg.text}</p>
+                    <p className="text-xs mt-1 opacity-70">
+                      {msg.language === 'sw' ? '🇰🇪 SW' : '🇬🇧 EN'}
+                      {msg.ragContext && msg.ragContext.hasRealAPIResponse && ' ✓ HF API'}
+                    </p>
+                  </div>
+                  {msg.ragContext && (
+                    <div className="text-xs text-slate-500 mt-1 ml-2">
+                      Intent: {msg.ragContext.intent.join(', ')}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
