@@ -28,7 +28,9 @@ ChamaAI revolutionizes how savings groups manage finances by providing:
 - Loan management assistance with debt-to-contribution ratios
 - Dividend projections using historical contribution patterns
 - Fine and penalty insights with personalized advice
-- Real Hugging Face API integration (Llama-2-7b with fallback to mock responses)
+- **Real Hugging Face API integration** (Llama-2-7b) with automatic fallback to high-quality mock responses
+- **Works without setup**: Perfect mock responses out of the box
+- **Optional real AI**: Set `HUGGINGFACE_API_KEY` for real Llama-2 responses (see [Hugging Face Setup Guide](./HUGGINGFACE_SETUP.md))
 
 ### 3. Share Management System
 - Admin tools to issue shares to members

@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useChamaContext } from '@/contexts/ChamaContext';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { DeFiVisualizer } from '@/components/DeFiVisualizer';
 import { AdminShareIssuer } from '@/components/AdminShareIssuer';
 import { BlockchainLedger } from '@/components/BlockchainLedger';
@@ -41,13 +42,13 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+      <header className="border-b border-border sticky top-0 z-50 bg-card">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">ChamaAI Dashboard</h1>
-            <p className="text-sm text-slate-400">
+            <h1 className="text-2xl font-bold text-foreground">ChamaAI Dashboard</h1>
+            <p className="text-sm text-muted-foreground">
               Welcome, {currentUser.name} ({currentUser.role})
             </p>
           </div>
@@ -56,7 +57,7 @@ export default function DashboardPage() {
             <select
               value={displayChama?.id || ''}
               onChange={(e) => handleChamaSwitch(e.target.value)}
-              className="px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 bg-input border border-border rounded-md text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               {allChamas.map((chama) => (
                 <option key={chama.id} value={chama.id}>
@@ -64,16 +65,16 @@ export default function DashboardPage() {
                 </option>
               ))}
             </select>
+            <ThemeToggle />
             <Button
               onClick={() => router.push('/dashboard/accessibility')}
               variant="outline"
-              className="text-white border-slate-600 hover:bg-slate-700"
             >
               Accessibility
             </Button>
             <Button
               onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
             >
               Logout
             </Button>
@@ -99,7 +100,7 @@ export default function DashboardPage() {
 
             {/* Tabs */}
             <Tabs defaultValue="overview" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4 bg-slate-700">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="admin">Share Manager</TabsTrigger>
                 <TabsTrigger value="ledger">Blockchain</TabsTrigger>

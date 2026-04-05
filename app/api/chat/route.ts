@@ -1,6 +1,7 @@
 import { generateAIResponse } from '@/lib/mockAIResponses';
 import { getChamaById, getUserById } from '@/lib/mockData';
 import { buildRAGContext, formatRAGAsPrompt, detectQueryIntent } from '@/utils/ragPipeline';
+import { checkHuggingFaceSetup } from '@/lib/checkApiSetup';
 
 interface HFResponse {
   generated_text: string;
@@ -14,7 +15,8 @@ async function callHuggingFaceAPI(
   const apiKey = process.env.HUGGINGFACE_API_KEY;
 
   if (!apiKey) {
-    console.warn('HUGGINGFACE_API_KEY not set, falling back to mock responses');
+    // API key not configured - gracefully fall back to mock responses
+    // This is expected behavior when users haven't set up Hugging Face integration
     return null;
   }
 
@@ -40,7 +42,10 @@ async function callHuggingFaceAPI(
     });
 
     if (!response.ok) {
-      console.warn(`Hugging Face API error: ${response.status}`, await response.text());
+      // API call failed - log only in development and fall back to mock
+      if (process.env.NODE_ENV === 'development') {
+        console.error(`[RAG] Hugging Face API error (${response.status}): Falling back to mock responses`);
+      }
       return null;
     }
 
@@ -54,7 +59,10 @@ async function callHuggingFaceAPI(
 
     return null;
   } catch (error) {
-    console.warn('Hugging Face API call failed:', error);
+    // Network or parsing error - fall back to mock responses
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[RAG] Hugging Face API call failed, using mock responses:', error instanceof Error ? error.message : String(error));
+    }
     return null;
   }
 }
@@ -65,6 +73,9 @@ function detectLanguage(message: string): 'en' | 'sw' {
 }
 
 export async function POST(request: Request) {
+  // Check API setup once on first request
+  checkHuggingFaceSetup();
+
   try {
     const body = await request.json();
     const { message, userId, chamaId } = body;
